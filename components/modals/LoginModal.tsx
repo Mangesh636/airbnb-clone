@@ -21,42 +21,49 @@ const LoginModal = () => {
   const registerModal = useRegisterModal();
   const [isLoading, setIsLoading] = useState(false);
 
-  const {
-    register,
+  // Form handling using react-hook-form
+  const { 
+    register, 
     handleSubmit,
-    formState: { errors },
+    formState: {
+      errors,
+    },
   } = useForm<FieldValues>({
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: ''
     },
   });
-
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  
+  // Function to handle form submission
+  const onSubmit: SubmitHandler<FieldValues> = 
+  (data) => {
     setIsLoading(true);
 
-    signIn("credentials", {
-      ...data,
+    // Sign in using next-auth
+    signIn('credentials', { 
+      ...data, 
       redirect: false,
-    }).then((callback) => {
+    })
+    .then((callback) => {
       setIsLoading(false);
 
       if (callback?.ok) {
-        toast.success("Logged In");
+        toast.success('Logged in');
         router.refresh();
         loginModal.onClose();
       }
-
+      
       if (callback?.error) {
         toast.error(callback.error);
       }
     });
-  };
+  }
 
   const onToggle = useCallback(() => {
     loginModal.onClose();
     registerModal.onOpen();
-  }, [loginModal, registerModal]);
+  }, [loginModal, registerModal])
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
